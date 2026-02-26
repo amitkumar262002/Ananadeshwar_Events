@@ -43,6 +43,7 @@ window.addEventListener('scroll', () => {
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open');
   navLinks.classList.toggle('open');
+  navbar.classList.toggle('menu-open');
   document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
 });
 
@@ -89,7 +90,7 @@ window.addEventListener('scroll', setActiveNavLink, { passive: true });
 
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
+  anchor.addEventListener('click', function (e) {
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
       e.preventDefault();
@@ -196,7 +197,7 @@ revealElements.forEach(el => revealObserver.observe(el));
 
 // ===== GALLERY FILTER =====
 filterBtns.forEach(btn => {
-  btn.addEventListener('click', function() {
+  btn.addEventListener('click', function () {
     // Update active filter
     filterBtns.forEach(b => b.classList.remove('active'));
     this.classList.add('active');
@@ -230,7 +231,7 @@ filterBtns.forEach(btn => {
 
 // ===== GALLERY LIGHTBOX (Simple) =====
 galleryItems.forEach(item => {
-  item.addEventListener('click', function() {
+  item.addEventListener('click', function () {
     const img = this.querySelector('img');
     const caption = this.querySelector('.gallery-overlay span').textContent;
 
@@ -308,7 +309,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ===== CONTACT FORM VALIDATION & SUBMISSION =====
-contactForm.addEventListener('submit', function(e) {
+contactForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
   const nameInput = document.getElementById('name');
@@ -380,7 +381,7 @@ contactForm.addEventListener('submit', function(e) {
 ['name', 'phone', 'eventType'].forEach(id => {
   const el = document.getElementById(id);
   if (el) {
-    el.addEventListener('input', function() {
+    el.addEventListener('input', function () {
       this.classList.remove('error');
       const errEl = document.getElementById(id + 'Error') || document.getElementById(id.replace('Type', '') + 'Error');
       if (errEl) errEl.classList.remove('show');
@@ -406,28 +407,28 @@ window.addEventListener('scroll', () => {
 
 // ===== SERVICE CARD - RIPPLE EFFECT =====
 document.querySelectorAll('.service-card').forEach(card => {
-  card.addEventListener('mousemove', function(e) {
+  card.addEventListener('mousemove', function (e) {
     const rect = this.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     this.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(234,179,8,0.04) 0%, transparent 70%), #fff`;
   });
 
-  card.addEventListener('mouseleave', function() {
+  card.addEventListener('mouseleave', function () {
     this.style.background = '';
   });
 });
 
 // ===== TESTIMONIAL CARDS - TILT EFFECT =====
 document.querySelectorAll('.testimonial-card').forEach(card => {
-  card.addEventListener('mousemove', function(e) {
+  card.addEventListener('mousemove', function (e) {
     const rect = this.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     this.style.transform = `translateY(-4px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg)`;
   });
 
-  card.addEventListener('mouseleave', function() {
+  card.addEventListener('mouseleave', function () {
     this.style.transform = '';
     this.style.transition = 'transform 0.5s ease';
   });

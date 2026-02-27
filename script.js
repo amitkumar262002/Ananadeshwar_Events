@@ -354,27 +354,73 @@ contactForm.addEventListener('submit', function (e) {
 
   if (!valid) return;
 
-  // Simulate submission
+  // PREPARE DATA
+  const formData = {
+    name: nameInput.value.trim(),
+    phone: phone,
+    email: document.getElementById('email').value.trim(),
+    eventType: eventInput.value,
+    message: document.getElementById('message').value.trim()
+  };
+
+  // Google Sheets Web App URL - USER: PASTE YOUR URL HERE
+  const SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+  // Real submission
   submitBtn.disabled = true;
   submitBtn.innerHTML = `
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin">
       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
     </svg>
     Sending...
   `;
 
-  setTimeout(() => {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = `
+  if (SCRIPT_URL === "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
+    // Fallback/Demo mode if URL not yet provided
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Enquiry
+      `;
+      formSuccess.classList.add('show');
+      formSuccess.innerHTML = `<svg width="24" height="24" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg> Success! Connect your Apps Script URL in script.js to start saving data to Excel.`;
+      contactForm.reset();
+      setTimeout(() => formSuccess.classList.remove('show'), 8000);
+    }, 1500);
+    return;
+  }
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(formData),
+  })
+    .then(response => response.json())
+    .then(data => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       Send Enquiry
     `;
-    formSuccess.classList.add('show');
-    contactForm.reset();
 
-    // Hide success after 5s
-    setTimeout(() => formSuccess.classList.remove('show'), 5000);
-  }, 1800);
+      if (data.result === 'success') {
+        formSuccess.classList.add('show');
+        contactForm.reset();
+        setTimeout(() => formSuccess.classList.remove('show'), 5000);
+      } else {
+        alert('Something went wrong. Please try again or call us directly.');
+        console.error('Error:', data.message);
+      }
+    })
+    .catch(error => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Send Enquiry
+    `;
+      alert('Network error. Please check your connection.');
+      console.error('Fetch Error:', error);
+    });
 });
 
 // Clear error on input

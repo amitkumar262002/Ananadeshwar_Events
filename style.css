@@ -33,6 +33,22 @@
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===== UTILITIES ===== */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
 /* ===== RESET & BASE ===== */
 *,
 *::before,
@@ -322,21 +338,45 @@ button {
     flex-shrink: 0;
 }
 
-.nav-logo {
-    width: 44px;
-    height: 44px;
-    background: var(--gold-gradient);
-    color: #fff;
-    font-weight: 900;
-    font-size: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.05em;
-    box-shadow: var(--shadow-gold);
+/* ===== LOGO IMAGE - NAVBAR ===== */
+.nav-logo-img {
+    height: 58px;
+    width: auto;
+    object-fit: contain;
+    transition: var(--transition-slow);
     flex-shrink: 0;
 }
+
+.navbar:not(.scrolled):not(.menu-open) .nav-logo-img {
+    filter: drop-shadow(0 0 10px rgba(234, 179, 8, 0.5));
+}
+
+.navbar.scrolled .nav-logo-img {
+    filter: none;
+}
+
+.nav-brand:hover .nav-logo-img {
+    transform: scale(1.07);
+    filter: drop-shadow(0 4px 14px rgba(234, 179, 8, 0.65));
+}
+
+/* ===== LOGO IMAGE - FOOTER ===== */
+.footer-logo-img {
+    height: 70px;
+    width: auto;
+    object-fit: contain;
+    transition: var(--transition);
+    /* Dark bg footer — invert the white bg logo to look golden */
+    filter: brightness(0) invert(1);
+    opacity: 0.88;
+}
+
+.footer-logo-wrap:hover .footer-logo-img {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.06);
+}
+
 
 .nav-title-wrap {
     display: flex;
@@ -1479,17 +1519,26 @@ button {
     margin-bottom: 16px;
 }
 
-.footer-logo {
-    width: 44px;
-    height: 44px;
-    background: var(--gold-gradient);
-    color: #fff;
-    font-weight: 900;
-    font-size: 16px;
-    border-radius: 50%;
+.footer-logo-box {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: var(--transition);
+}
+
+.footer-logo-svg {
+    color: var(--gold);
+    transition: var(--transition);
+}
+
+.footer-logo-svg path,
+.footer-logo-svg rect {
+    stroke: currentColor;
+}
+
+.footer-logo-wrap:hover .footer-logo-svg {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--gold));
 }
 
 .footer-brand-name {
@@ -1786,6 +1835,10 @@ button {
 
     :root {
         --nav-height: 70px;
+    }
+
+    .nav-logo-img {
+        height: 46px;
     }
 
     .nav-links {
